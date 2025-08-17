@@ -4,7 +4,7 @@ import Experience from './Experience';
 import Skills from './Skills';
 import Projects from './Projects';
 import Contact from './Contact';
-import { LinkedInIcon } from './Icons';
+import { XIcon } from './Icons';
 
 const DataPanel = ({ section, onClose, setPage }) => {
     const contentMap = {
@@ -37,7 +37,7 @@ const DataPanel = ({ section, onClose, setPage }) => {
             <div className="flex-shrink-0 p-6 md:p-8 flex justify-between items-center border-b border-slate-700">
                 <h3 className="font-mono text-lg text-white">{titleMap[section] || "DATA"}</h3>
                 <button onClick={onClose} className="text-slate-400 hover:text-teal-300 transition-colors">
-                    <LinkedInIcon />
+                    <XIcon />
                 </button>
             </div>
             <div className="flex-grow p-6 md:p-8 pt-4 overflow-y-auto min-h-0">
