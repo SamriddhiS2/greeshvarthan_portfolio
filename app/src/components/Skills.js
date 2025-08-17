@@ -22,7 +22,7 @@ const Skills = () => {
                 <li className="relative before:content-['//'] before:absolute before:left-[-1.5em] before:text-slate-500">SolidWorks</li>
                 <li className="relative before:content-['//'] before:absolute before:left-[-1.5em] before:text-slate-500">CREO</li>
                 <li className="relative before:content-['//'] before:absolute before:left-[-1.5em] before:text-slate-500">CATIA</li>
-                <li className="relative before:content-['//'] before:absolute before:left-[-1.5em] before:text-slate-500">Ansys</li>
+                <li className="relative before:content-['//'] before:absolute before:left-[-1.5em] before:text-slate-500">ANSYS</li>
                 <li className="relative before:content-['//'] before:absolute before:left-[-1.5em] before:text-slate-500">Siemens StarCCM+</li>
                 <li className="relative before:content-['//'] before:absolute before:left-[-1.5em] before:text-slate-500">MSC Patran</li>
                 <li className="relative before:content-['//'] before:absolute before:left-[-1.5em] before:text-slate-500">Abaqus</li>
