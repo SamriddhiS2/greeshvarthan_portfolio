@@ -1,5 +1,5 @@
 import React from 'react';
-import { LinkedInIcon, GithubIcon, XIcon } from './Icons';
+import { LinkedInIcon, InstagramIcon, MailIcon } from './Icons';
 
 const SectionTitle = ({ children }) => <h2 className="text-xl font-bold text-teal-300 mb-4 tracking-wider">{children}</h2>;
 const P = ({ children }) => <p className="mb-4 text-white font-light">{children}</p>;

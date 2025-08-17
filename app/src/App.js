@@ -1,9 +1,17 @@
 import React from 'react';
+import { useState } from 'react';
 import ThreeDViewer from './components/ThreeDViewer';
 import HudElement from './components/Hud';
+import DataPanel from './components/DataPanel';
 import './App.css';
 
 export default function App() {
+  const [selectedSection, setSelectedSection] = useState(null);
+
+  const handleClosePanel = () => {
+    setSelectedSection(null);
+  };
+
   return (
     <main className='relative w-screen h-screen bg-[#0a192f]'>
       <HudElement position="top-left" />
@@ -18,6 +26,14 @@ export default function App() {
       <div className='absolute top-0 left-0 w-full h-full'>
         <ThreeDViewer />
       </div>
+      <div className="absolute ...">
+        <ThreeDViewer onPartClick={() => {}} />
+      </div>
+      <div className={`fixed bottom-4 ... ${selectedSection ? 'opacity-0' : 'opacity-100'}`}>
+        <p>Click labeled satellite components to explore.</p>
+        <p>Click & Drag to rotate.</p>
+      </div>
+      <DataPanel section={selectedSection} onClose={handleClosePanel} />
     </main>
   );
 }
