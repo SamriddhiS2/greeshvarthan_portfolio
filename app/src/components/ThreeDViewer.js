@@ -56,13 +56,53 @@ const ThreeDViewer = () => {
         
         scene.add(satelliteGroup);
 
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+
+        const onMouseDown = (e) => {
+            isDragging = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        };
+
+        const onMouseUp = () => {
+            isDragging = false;
+        };
+
+        const onMouseMove = (e) => {
+            if (isDragging) {
+                const deltaMove = {
+                    x: e.clientX - previousMousePosition.x,
+                    y: e.clientY - previousMousePosition.y
+                };
+                satelliteGroup.rotation.y += deltaMove.x * 0.005;
+                satelliteGroup.rotation.x += deltaMove.y * 0.005;
+                previousMousePosition = { x : e.clientX, y: e.clientY };
+            }
+        };
+
+        mount.addEventListener('mousedown', onMouseDown);
+        mount.addEventListener('mouseup', onMouseUp);
+        mount.addEventListener('mousemove', onMouseMove);
+        mount.addEventListener('mouseleave', () => { isDragging = false; });
+
+        const clock = new THREE.Clock();
         const animate = () => {
             requestAnimationFrame(animate);
+
+            const elapsedTime = clock.getElapsedTime();
+            if (!isDragging) {
+                satelliteGroup.rotation.y += 0.001; // auto-rotation
+            }
+            satelliteGroup.position.y = Math.sin(elapsedTime * 0.5) * 0.1;  // gentle float
+
             renderer.render(scene, camera);
         };
         animate();
 
         return () => {
+            mount.removeEventListener('mousedown', onMouseDown);
+            mount.removeEventListener('mouseup', onMouseUp);
+            mount.removeEventListener('mousemove', onMouseMove);
             mount.removeChild(renderer.domElement);
         };
     }, []);
