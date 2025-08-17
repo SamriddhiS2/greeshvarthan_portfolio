@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 const ThreeDViewer = () => {
@@ -12,6 +13,48 @@ const ThreeDViewer = () => {
         const renderer = new THREE.WebGLRenderer({ alpha: true });
         renderer.setSize(mount.clientWidth, mount.clientHeight);
         mount.appendChild(renderer.domElement);
+
+        const ambientLight = new THREE.AmbientLight(0x404040, 2);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0x64ffda, 1.5);
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+
+        const defaultMaterial = new THREE.MeshStandardMaterial({ color: 0xccd6f6, wireframe: true });
+        const satelliteGroup = new THREE.Group();
+
+        // main bus
+        const body = new THREE.Mesh(new THREE.BoxGeometry(1.5, 2, 1.5), defaultMaterial.clone());
+        body.name = 'about';
+        satelliteGroup.add(body);
+
+        // solar panels
+        const panelGeometry = new THREE.BoxGeometry(3, 1.5, 0.1);
+        const leftPanel = new THREE.Mesh(panelGeometry, defaultMaterial.clone());
+        leftPanel.position.x = -2.25;
+        leftPanel.name = 'projects';
+        satelliteGroup.add(leftPanel);
+
+        const rightPanel = new THREE.Mesh(panelGeometry, defaultMaterial.clone());
+        leftPanel.position.x = 2.25;
+        leftPanel.name = 'experience';
+        satelliteGroup.add(rightPanel);
+
+        // antenna
+        const antenna = new THREE.Mesh(new THREE.ConeGeometry(0.3, 1, 16), defaultMaterial.clone());
+        antenna.position.y = 1.5;
+        antenna.rotation.x = Math.PI;
+        antenna.name = 'contact';
+        satelliteGroup.add(antenna);
+
+        // comms dish
+        const dish = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), defaultMaterial.clone());
+        dish.position.y = -1.5;
+        dish.name = 'skills';
+        satelliteGroup.add(dish);
+        
+        scene.add(satelliteGroup);
 
         const animate = () => {
             requestAnimationFrame(animate);
