@@ -9,6 +9,7 @@ const ThreeDViewer = () => {
         const mount = mountRef.current;
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, mount.clientWidth / mount.clientHeight, 0.1, 1000);
+        camera.position.z = 7;
 
         const renderer = new THREE.WebGLRenderer({ alpha: true });
         renderer.setSize(mount.clientWidth, mount.clientHeight);
@@ -37,8 +38,8 @@ const ThreeDViewer = () => {
         satelliteGroup.add(leftPanel);
 
         const rightPanel = new THREE.Mesh(panelGeometry, defaultMaterial.clone());
-        leftPanel.position.x = 2.25;
-        leftPanel.name = 'experience';
+        rightPanel.position.x = 2.25;
+        rightPanel.name = 'experience';
         satelliteGroup.add(rightPanel);
 
         // antenna
