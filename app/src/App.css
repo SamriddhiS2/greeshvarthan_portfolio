@@ -7,6 +7,14 @@ body {
     overflow: hidden;
 }
 
-.overflow-y-auto::-webkit-scrollbar { width: 6px; }
-.overflow-y-auto::-webkit-scrollbar-track { background: transparent; }
-.overflow-y-auto::-webkit-scrollbar-thumb { background-color: #38b2ac; border-radius: 3px; }
+.overflow-y-auto::-webkit-scrollbar {
+    width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+    background: transparent;
+}
+.overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: #38b2ac;
+    border-radius: 3px;
+}
