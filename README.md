@@ -40,4 +40,6 @@ This is a personal portfolio website for an aerospace engineering student, featu
 To start the development server, run:
 
 ```bash
+cd app
 npm start
+```
