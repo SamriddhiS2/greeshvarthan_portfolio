@@ -30,6 +30,10 @@ This is a personal portfolio website for an aerospace engineering student, featu
     ```bash
     cd greesh-portfolio
     ```
+3. Navigate to the react app directory:
+    ```bash
+    cd app
+    ```
 3.  Install dependencies:
     ```bash
     npm install
@@ -40,6 +44,5 @@ This is a personal portfolio website for an aerospace engineering student, featu
 To start the development server, run:
 
 ```bash
-cd app
 npm start
 ```
