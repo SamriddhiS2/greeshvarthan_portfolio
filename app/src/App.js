@@ -40,7 +40,7 @@ export default function App() {
           <>
             <header className="fixed top-0 left-0 w-full p-4 md:p-8 z-10 pointer-events-none">
               <div className="text-lg font-bold text-teal-300 tracking-widest">
-                Greesh Varthan <span className="font-light text-white">Anusha Singaravelan</span>
+                Greesh Varthan A. S. <span className="font-light text-white">| Aerospace Engineer</span>
               </div>
             </header>
             <div className="absolute top-0 left-0 w-full h-full">
