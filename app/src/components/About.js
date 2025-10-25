@@ -1,4 +1,5 @@
 import React from 'react';
+import headshot from '../img/headshot_greesh.png';
 
 const SectionTitle = ({ children }) => <h2 className="text-xl font-bold text-teal-300 mb-4 tracking-wider">{children}</h2>;
 const P = ({ children }) => <p className="mb-4 text-white font-light">{children}</p>;
@@ -9,10 +10,10 @@ const About = () => (
     <div className="flex flex-col sm:flex-row gap-6">
         <div className="sm:w-1/3 flex-shrink-0">
             <img 
-                src="https://placehold.co/400x400/0a192f/64ffda?text=GV" 
+                src={headshot}
                 alt="Headshot of Greesh Varthan"
                 className="rounded-md border-2 border-slate-700 w-full h-auto"
-                onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x400/0a192f/FFFFFF?text=Image+Not+Found'; }}
+                onError={(e) => { e.target.onerror = null; e.target.src = {headshot}; }}
             />
         </div>
         <div className="sm:w-2/3">
