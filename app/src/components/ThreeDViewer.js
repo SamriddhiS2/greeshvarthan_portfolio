@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import * as THREE from 'three';
 
 const ThreeDViewer = ({ onPartClick, showLabels }) => {
@@ -77,6 +77,7 @@ const ThreeDViewer = ({ onPartClick, showLabels }) => {
         
         scene.add(satelliteGroup);
 
+        // stars
         const starVertices = [];
         for (let i = 0; i < 10000; i++) {
             const x = (Math.random() - 0.5) * 2000;
