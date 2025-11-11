@@ -1,4 +1,4 @@
-# Greesh Portfoilio
+# Greesh Portfolio
 ## Interactive 3D Aerospace Portfolio
 
 This is a personal portfolio website for an aerospace engineering student, featuring an interactive 3D satellite model built with React, Three.js, and Tailwind CSS.
