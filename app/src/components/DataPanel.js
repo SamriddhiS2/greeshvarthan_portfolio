@@ -35,7 +35,7 @@ const DataPanel = ({ section, onClose, setPage }) => {
     return (
         <div className={panelClasses}>
             <div className="flex-shrink-0 p-6 md:p-8 flex justify-between items-center border-b border-slate-700">
-                <h3 className="font-mono text-lg text-white">{titleMap[section] || "DATA"}</h3>
+                <h3 className="font-mono text-lg text-white">{titleMap[section]}</h3>
                 <button onClick={onClose} className="text-slate-400 hover:text-teal-300 transition-colors">
                     <XIcon />
                 </button>
