@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/greeshvarthan_portfolio/static/css/main.d907c963.css",
+    "main.js": "/greeshvarthan_portfolio/static/js/main.ea150e0e.js",
+    "static/media/cubesat.png": "/greeshvarthan_portfolio/static/media/cubesat.95c411d1f8a22b4f6c0f.png",
+    "static/media/hypersonic_missile.png": "/greeshvarthan_portfolio/static/media/hypersonic_missile.791f2fcfc1ca9c5fc649.png",
+    "static/media/headshot.png": "/greeshvarthan_portfolio/static/media/headshot.496c378eb47476131b43.png",
+    "static/media/boeing747.png": "/greeshvarthan_portfolio/static/media/boeing747.094dcf22ae36c13c1f60.png",
+    "static/media/spl.png": "/greeshvarthan_portfolio/static/media/spl.f121a05c784e87b6f8f8.png",
+    "index.html": "/greeshvarthan_portfolio/index.html",
+    "main.d907c963.css.map": "/greeshvarthan_portfolio/static/css/main.d907c963.css.map",
+    "main.ea150e0e.js.map": "/greeshvarthan_portfolio/static/js/main.ea150e0e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d907c963.css",
+    "static/js/main.ea150e0e.js"
+  ]
+}
