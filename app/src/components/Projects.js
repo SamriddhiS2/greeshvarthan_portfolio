@@ -1,8 +1,8 @@
 import React from 'react';
-import hypersonic from '../img/hypersonic_missile.png';
-import spl from '../img/spl.png';
-import boeing from '../img/boeing747.png';
-import cubesat from '../img/cubesat.png';
+import hypersonic from '../assets/hypersonic_missile.png';
+import spl from '../assets/spl.png';
+import boeing from '../assets/boeing747.png';
+import cubesat from '../assets/cubesat.png';
 
 const SectionTitle = ({ children }) => <h2 className="text-xl font-bold text-teal-300 mb-4 tracking-wider">{children}</h2>;
 const P = ({ children }) => <p className="mb-4 text-white font-light">{children}</p>;
