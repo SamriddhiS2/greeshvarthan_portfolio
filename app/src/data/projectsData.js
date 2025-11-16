@@ -1,6 +1,6 @@
-import hypersonic from '../assets/hypersonic.png';
+import hypersonic from '../assets/hypersonic_missile.png';
 import spl from '../assets/spl.png';
-import boeing from '../assets/boeing.png';
+import boeing from '../assets/boeing747.png';
 import cubesat from '../assets/cubesat.png';
 
 export const projectsData = [
