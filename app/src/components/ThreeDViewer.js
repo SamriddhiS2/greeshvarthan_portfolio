@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import * as THREE from 'three';
 
 const ThreeDViewer = ({ onPartClick, showLabels }) => {
@@ -21,6 +20,10 @@ const ThreeDViewer = ({ onPartClick, showLabels }) => {
 
     useEffect(() => {
         const mount = mountRef.current;
+        if (!mount) {
+            return;
+        }
+
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, mount.clientWidth / mount.clientHeight, 0.1, 1000);
         camera.position.z = 7;
@@ -172,6 +175,10 @@ const ThreeDViewer = ({ onPartClick, showLabels }) => {
 
             // update label positions
             labelsRef.current.forEach((label, i) => {
+                if (!labelData[i]) {
+                    return;
+                }
+                
                 const part = satelliteGroup.children.find(child => child.name === labelData[i].name);
                 const line = linesRef.current[i];
                 if (part && label && line && cameraRef.current) {
@@ -200,20 +207,25 @@ const ThreeDViewer = ({ onPartClick, showLabels }) => {
         animate();
 
         const onResize = () => {
-            if (cameraRef.current) {
+            if (cameraRef.current && mount) {
                 cameraRef.current.aspect = mount.clientWidth / mount.clientHeight;
                 cameraRef.current.updateProjectionMatrix();
             }
-            renderer.setSize(mount.clientWidth, mount.clientHeight);
+            if (renderer && mount) {
+                renderer.setSize(mount.clientWidth, mount.clientHeight);
+            }
         };
         window.addEventListener('resize', onResize);
+        onResize();
 
         return () => {
             window.removeEventListener('resize', onResize);
-            mount.removeEventListener('mousedown', onMouseDown);
-            mount.removeEventListener('mouseup', onMouseUp);
-            mount.removeEventListener('mousemove', onMouseMove);
-            if (renderer.domElement.parentElement === mount) {
+            if (mount) {
+                mount.removeEventListener('mousedown', onMouseDown);
+                mount.removeEventListener('mouseup', onMouseUp);
+                mount.removeEventListener('mousemove', onMouseMove);
+            }
+            if (renderer.domElement && renderer.domElement.parentElement === mount) {
                 mount.removeChild(renderer.domElement);
             }
         };
