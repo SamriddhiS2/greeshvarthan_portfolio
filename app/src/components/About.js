@@ -1,5 +1,5 @@
 import React from 'react';
-import headshot from '../assets/headshot.png';
+import headshot from '../assets/greesh_headshot_updated.png';
 
 const SectionTitle = ({ children }) => <h2 className="text-xl font-bold text-teal-300 mb-4 tracking-wider">{children}</h2>;
 const P = ({ children }) => <p className="mb-4 text-white font-light">{children}</p>;
