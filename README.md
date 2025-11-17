@@ -28,7 +28,7 @@ This is a personal portfolio website for an aerospace engineering student, featu
     ```
 2.  Navigate to the project directory:
     ```bash
-    cd greesh-portfolio
+    cd greeshvarthan_portfolio
     ```
 3. Navigate to the react app directory:
     ```bash
@@ -36,7 +36,7 @@ This is a personal portfolio website for an aerospace engineering student, featu
     ```
 3.  Install dependencies:
     ```bash
-    npm install
+    npm install # or npm i
     ```
 
 ### Running the Application
