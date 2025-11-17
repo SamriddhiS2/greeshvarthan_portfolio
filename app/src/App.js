@@ -32,6 +32,14 @@ export default function App() {
     }, 2000); // 2-second transition
   };
 
+  const handleBackToMainClick = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setPage('main');
+      setIsTransitioning(false);
+    }, 2000); // 2-second transition
+  };
+
   const memoizedHud = useMemo(() => (
     <>
       <HudElement position="top-left" />
@@ -44,10 +52,10 @@ export default function App() {
   const renderPage = () => {
     switch (page) {
       case 'projects':
-        return <ProjectsPage setPage={setPage} />;
+        return <ProjectsPage setPage={handleBackToMainClick} />;
       
       case 'static':
-        return <StaticPage setPage={setPage} />;
+        return <StaticPage setPage={handleBackToMainClick} />;
         
       case 'main':
       default:
