@@ -7,6 +7,21 @@ body {
     overflow: hidden;
 }
 
+/* Scrollbar for Static Page */
+.static-page-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.static-page-scroll::-webkit-scrollbar-track {
+  background: #0a192f;
+}
+
+.static-page-scroll::-webkit-scrollbar-thumb {
+  background-color: #38b2ac;
+  border-radius: 3px;
+}
+
+/*  Main App Scrollbar (DataPanel) */
 .overflow-y-auto::-webkit-scrollbar {
     width: 6px;
 }
@@ -17,4 +32,286 @@ body {
 .overflow-y-auto::-webkit-scrollbar-thumb {
     background-color: #38b2ac;
     border-radius: 3px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Original Button Animation */
+@keyframes fly {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(15px) translateY(-15px) rotate(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(30px) translateY(-30px) rotate(25deg);
+    opacity: 0;
+  }
+}
+
+.airplane-icon {
+  display: inline-block;
+  transition: all 0.5s ease-out;
+  opacity: 1;
+}
+
+/* New Globe Transition Animation */
+.globe-transition {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #0a192f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.globe {
+  width: 150px;
+  height: 150px;
+  background-color: #ccd6f6;
+  border-radius: 50%;
+  position: relative;
+  animation: spin 10s linear infinite;
+  box-shadow: 0 0 25px #38b2ac, inset 0 0 15px rgba(0,0,0,0.2);
+  background-image: linear-gradient(135deg, #ccd6f6 25%, #bfd0f7 25%, #bfd0f7 50%, #ccd6f6 50%, #ccd6f6 75%, #bfd0f7 75%, #bfd0f7 100%);
+  background-size: 40px 40px;
+}
+
+.orbit-path {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 250px;
+  height: 250px;
+  margin-top: -125px;
+  margin-left: -125px;
+  border-radius: 50%;
+  animation: orbit 2s linear infinite;
+}
+
+.orbit-plane {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  margin-left: -16px;
+  width: 32px;
+  height: 32px;
+  color: white;
+  transform: rotate(90deg);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Scroll Spy active link */
+.nav-link-active {
+  color: #38b2ac;
+  transform: scale(1.1);
+  font-weight: 700;
+}
+
+/* New Form Styles */
+.form-input, .form-textarea {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  color: #e2e8f0;
+  border-radius: 0.375rem;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus, .form-textarea:focus {
+  outline: none;
+  border-color: #38b2ac;
+  box-shadow: 0 0 0 2px #0a192f, 0 0 0 4px #38b2ac;
+}
+
+.form-textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.form-button {
+  background-color: transparent;
+  border: 1px solid #38b2ac;
+  color: #38b2ac;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.form-button:hover {
+  background-color: rgba(56, 178, 172, 0.1);
+  box-shadow: 0 0 10px rgba(56, 178, 172, 0.3);
+}
+
+.form-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-success-message {
+  color: #38b2ac;
+  background-color: rgba(56, 178, 172, 0.1);
+  border: 1px solid rgba(56, 178, 172, 0.5);
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* New Skill Tree Styles */
+.skill-tree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.skill-trunk {
+  width: 2px;
+  height: 40px;
+  background-color: #334155;
+}
+.skill-branches {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.skill-branch {
+  flex: 1;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* Horizontal line from trunk */
+.skill-branch::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0; 
+  width: 100%; 
+  height: 2px;
+  background-color: #334155;
+}
+
+/* Vertical line down from horizontal */
+.skill-branch::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 20px;
+  background-color: #334155;
+}
+
+/* Connections for the outer branches */
+.skill-branch:first-child::before {
+  left: 50%;
+  width: 50%;
+}
+.skill-branch:last-child::before {
+  left: 0;
+  width: 50%;
+}
+.skill-category-title {
+  margin-top: 20px;
+  color: #e2e8f0;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid #334155;
+  border-radius: 0.375rem;
+  background-color: #1e293b;
+  white-space: nowrap;
+}
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.skill-tag {
+  background-color: #334155;
+  color: #94a3b8;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+/* New Experience Timeline Styles */
+.experience-timeline {
+  position: relative;
+}
+
+/* The vertical timeline bar */
+.experience-timeline::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 11px;
+  bottom: 10px;
+  width: 2px;
+  background-color: #334155;
+}
+.timeline-item {
+  position: relative;
+  padding-left: 40px;
+  margin-bottom: 2rem;
+}
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+/* The node on the timeline */
+.timeline-icon {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 24px;
+  height: 24px;
+  background-color: #38b2ac;
+  border: 4px solid #0a192f;
+  border-radius: 50%;
+  z-index: 1;
+}
+.timeline-content {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  transition: all 0.2s;
+}
+.timeline-content:hover {
+  box-shadow: 0 0 15px rgba(56, 178, 172, 0.1);
+  border-color: #38b2ac;
 }
