@@ -1,11 +1,10 @@
 import React from 'react';
-
-const SectionTitle = ({ children }) => <h2 className="text-xl font-bold text-teal-300 mb-4 tracking-wider">{children}</h2>;
+import { SectionTitle } from './About';
 
 const Skills = () => {
   return (
     <div>
-        <SectionTitle>// SKILLS_MATRIX</SectionTitle>
+        <SectionTitle>SKILLS</SectionTitle>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
                 <h3 className="text-white font-semibold mb-2 border-b border-slate-700 pb-1">Languages</h3>
