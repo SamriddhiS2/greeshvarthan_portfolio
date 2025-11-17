@@ -16,11 +16,11 @@ const DataPanel = ({ section, onClose, setPage }) => {
     };
 
     const titleMap = {
-        about: "About Me",
-        experience: "Experience",
-        skills: "Skills Matrix",
-        projects: "Project Files",
-        contact: "Contact Channel",
+        about: "✧ MAIN_BUS",
+        experience: "✧ SOLAR_ARRAY_R",
+        skills: "✧ COMMS_DISH",
+        projects: "✧ SOLAR_ARRAY_L",
+        contact: "✧ ANTENNA",
     };
 
     const panelClasses = `
