@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionTitle, P } from './About';
+import { SectionTitle, P } from './common';
 import { projectsData } from '../data/projectsData';
 
 const Projects = ({ setPage }) => (

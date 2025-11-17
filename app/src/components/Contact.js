@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionTitle, P, A } from './About';
+import { SectionTitle, P, A } from './common';
 import { LinkedInIcon, InstagramIcon, MailIcon, GithubIcon, AirplaneIcon } from './Icons';
 
 const Contact = () => {

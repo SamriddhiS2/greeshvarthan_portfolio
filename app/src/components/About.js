@@ -1,12 +1,10 @@
 import React from 'react';
-import headshot from '../assets/greesh_headshot_updated.png';
-
-const SectionTitle = ({ children }) => <h2 className="text-xl font-bold text-teal-300 mb-4 tracking-wider">{children}</h2>;
-const P = ({ children }) => <p className="mb-4 text-white font-light">{children}</p>;
+import headshot from '../assets/headshot.png';
+import { SectionTitle, P } from './common';
 
 const About = () => (
   <div>
-    <SectionTitle>// ABOUT_ME</SectionTitle>
+    <SectionTitle>ABOUT ME</SectionTitle>
     <div className="flex flex-col sm:flex-row gap-6">
         <div className="sm:w-1/3 flex-shrink-0">
             <img 
