@@ -1,11 +1,10 @@
 import React from 'react';
-
-const SectionTitle = ({ children }) => <h2 className="text-xl font-bold text-teal-300 mb-4 tracking-wider">{children}</h2>;
+import { SectionTitle } from './About';
 
 const Experience = () => {
   return (
     <div>
-        <SectionTitle>// EXPERIENCE</SectionTitle>
+        <SectionTitle>EXPERIENCE</SectionTitle>
         <div className="mb-6">
             <h3 className="text-white font-semibold">Mechanical Design Engineer | Elementrailer</h3>
             <p className="text-xs text-slate-300 mb-2">Oct 2025 - Present</p>
