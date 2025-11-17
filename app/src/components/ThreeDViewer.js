@@ -252,7 +252,7 @@ const ThreeDViewer = ({ onPartClick, showLabels }) => {
                         ref={el => labelsRef.current[i] = el}
                         className="absolute top-0 left-0 p-2 text-xs text-teal-300 bg-slate-900/50 rounded"
                     >
-                        // {data.partName} <span className="text-white">{data.text}</span>
+                          ✦ {data.partName} <span className="text-white">{data.text}</span>
                     </div>
                 ))}
             </div>
