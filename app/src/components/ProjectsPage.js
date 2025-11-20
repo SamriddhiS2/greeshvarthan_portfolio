@@ -17,7 +17,7 @@ const ProjectsPage = ({ setPage }) => (
                     <img 
                         src={p.image} 
                         alt={`Visualization for ${p.title}`}
-                        className="rounded-md w-full h-48 object-cover mb-4 border border-slate-600"
+                        className="rounded-md w-full h-48 object-fit mb-4 border border-slate-600"
                         onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/0a192f/FFFFFF?text=Image+Not+Found'; }}
                     />
                     <h2 className="text-xl font-bold text-teal-300 mb-2">{p.title}</h2>
