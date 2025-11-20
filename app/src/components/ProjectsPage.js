@@ -3,14 +3,15 @@ import { ArrowLeftIcon } from './Icons';
 import { projectsData } from '../data/projectsData';
 
 const ProjectsPage = ({ setPage }) => (
-    <div className="absolute top-0 left-0 w-full h-full bg-[#0a192f] p-4 md:p-8 overflow-y-auto">
-        <header className="flex justify-between items-center mb-8 sticky top-0 z-10 bg-[#0a192f]/80 backdrop-blur-md -m-4 -mb-0 p-4 md:-m-8 md:mb-0 md:p-8">
+    <div className="absolute top-0 left-0 w-full h-full bg-[#0a192f] overflow-y-auto">
+        <header className="sticky top-0 z-50 flex justify-between items-center bg-[#0a192f]/90 backdrop-blur-md px-4 py-4 md:px-8 md:py-6 border-b border-slate-800/50">
             <h1 className="text-2xl font-bold text-teal-300 tracking-widest">PROJECT_ARCHIVE</h1>
             <button onClick={() => setPage('main')} className="flex items-center gap-2 text-teal-300 hover:underline">
                 <ArrowLeftIcon />
                 Back to Satellite
             </button>
         </header>
+        <div className="p-4 md:p-8"></div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto pt-8">
             {projectsData.map(p => (
                 <div key={p.id} className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 flex flex-col">
