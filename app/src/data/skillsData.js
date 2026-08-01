@@ -1,5 +1,5 @@
 export const skillsData = {
-  languages: ["Python", "C", "C++", "MATLAB", "Java"],
-  software: ["SolidWorks", "CREO", "CATIA", "ANSYS", "StarCCM+", "MSC Patran", "Abaqus CAE"],
-  concepts: ["Orbital Mechanics", "CFD", "FEA", "Propulsion", "Structure Mechanics", "Composite Materials"]
+  languages: ["Python", "TypeScript", "JavaScript", "C", "C++", "MATLAB", "Java"],
+  software: ["SolidWorks", "CREO", "Onshape", "CATIA", "ANSYS", "StarCCM+", "Abaqus CAE", "GOM Correlate"],
+  concepts: ["FEA", "CFD", "GD&T & Tolerance Stack-up", "DIC / Optical Strain Measurement", "Structure Mechanics", "Composite Materials", "LLM APIs & Prompt Design"]
 };
