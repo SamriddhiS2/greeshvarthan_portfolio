@@ -1,18 +1,21 @@
 {
   "files": {
     "main.css": "/static/css/main.3a30d94b.css",
-    "main.js": "/static/js/main.9648e4be.js",
+    "main.js": "/static/js/main.c533f767.js",
     "static/media/cubesat.png": "/static/media/cubesat.95c411d1f8a22b4f6c0f.png",
+    "static/media/destified.png": "/static/media/destified.ac1417226565c7c86097.png",
     "static/media/hypersonic_missile.png": "/static/media/hypersonic_missile.791f2fcfc1ca9c5fc649.png",
     "static/media/headshot.png": "/static/media/headshot.fb1fbd4ac4eead6dbab5.png",
+    "static/media/dic_solver.png": "/static/media/dic_solver.cc7260c339fc355b8025.png",
     "static/media/boeing747.png": "/static/media/boeing747.094dcf22ae36c13c1f60.png",
+    "static/media/paperskimmer.png": "/static/media/paperskimmer.b9002a8f4aa69e20cea4.png",
     "static/media/spl.png": "/static/media/spl.f121a05c784e87b6f8f8.png",
     "index.html": "/index.html",
     "main.3a30d94b.css.map": "/static/css/main.3a30d94b.css.map",
-    "main.9648e4be.js.map": "/static/js/main.9648e4be.js.map"
+    "main.c533f767.js.map": "/static/js/main.c533f767.js.map"
   },
   "entrypoints": [
     "static/css/main.3a30d94b.css",
-    "static/js/main.9648e4be.js"
+    "static/js/main.c533f767.js"
   ]
 }
