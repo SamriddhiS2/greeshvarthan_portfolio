@@ -154,6 +154,7 @@ const StaticPage = ({ setPage }) => {
                         <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Create and iterate SolidWorks/Onshape models for trailer structural sub-systems (frame, suspension, and battery cradle).</li>
                         <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Conduct ANSYS structural, fatigue, and thermal analyses for the 10k lb-GVWR chassis and mounting systems.</li>
                         <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Support materials research, focusing on lightweight and durable design for aerospace-grade trailer applications.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Build the team's engineering software: a Python electro-thermal battery model with a GUI, used for sizing and cooling trade studies.</li>
                     </ul>
                   </div>
                 </div>
