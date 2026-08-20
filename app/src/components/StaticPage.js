@@ -5,13 +5,15 @@ import { projectsData } from '../data/projectsData';
 import { skillsData } from '../data/skillsData';
 import headshot from '../assets/headshot.png';
 
-const StaticPage = ({ setPage }) => {
-  const [activeSection, setActiveSection] = useState('about');
+const StaticPage = ({ setPage, initialSection, showBackButton = true }) => {
+  const [activeSection, setActiveSection] = useState(initialSection || 'about');
+  const [menuOpen, setMenuOpen] = useState(false);
   const scrollContainerRef = useRef(null);
   const aboutRef = useRef(null);
   const experienceRef = useRef(null);
   const skillsRef = useRef(null);
   const projectsRef = useRef(null);
+  const patentsRef = useRef(null);
   const contactRef = useRef(null);
 
   const sections = useMemo(() => [
@@ -19,29 +21,49 @@ const StaticPage = ({ setPage }) => {
     { id: 'experience', title: 'Experience', ref: experienceRef },
     { id: 'skills', title: 'Skills', ref: skillsRef },
     { id: 'projects', title: 'Projects', ref: projectsRef },
+    { id: 'patents', title: 'Patents', ref: patentsRef },
     { id: 'contact', title: 'Contact', ref: contactRef },
   ], []);
 
+  // Scroll-spy via IntersectionObserver: no per-scroll-event DOM reads (issue #15)
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
-
-    const handleScroll = () => {
-      const scrollPos = container.scrollTop;
-      let currentSection = sections[0].id;
-      const offset = 100;
-
-      for (const section of sections) {
-        if (section.ref.current && section.ref.current.offsetTop - offset <= scrollPos) {
-          currentSection = section.id;
-        }
-      }
-      setActiveSection(currentSection);
-    };
-
-    container.addEventListener('scroll', handleScroll);
-    return () => container.removeEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActiveSection(entry.target.id);
+      });
+    }, { root: container, rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+    sections.forEach(s => { if (s.ref.current) observer.observe(s.ref.current); });
+    return () => observer.disconnect();
   }, [sections]);
+
+  // Fade-in-on-scroll reveal (issue #12); reveals once, then stops observing
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const els = container.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { root: container, rootMargin: '0px 0px -10% 0px' });
+    els.forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  // deep link: jump to the requested section once refs are laid out
+  useEffect(() => {
+    if (!initialSection) return;
+    const target = sections.find(s => s.id === initialSection);
+    if (target && target.ref.current && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: target.ref.current.offsetTop - 80 });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,24 +71,93 @@ const StaticPage = ({ setPage }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    const form = e.target;
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+    const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:greeshv03@gmail.com?subject=${subject}&body=${body}`;
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
-    }, 1000);
+    }, 600);
+  };
+
+  const scrollToSection = (section) => {
+    if (section.ref.current && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        top: section.ref.current.offsetTop - 80,
+        behavior: 'smooth'
+      });
+      window.history.replaceState(null, '', `#${section.id}`);
+    }
   };
 
   return (
-    <div 
-      ref={scrollContainerRef} 
-      className="static-page-scroll absolute top-0 left-0 w-full h-screen bg-[#0a192f] text-white overflow-y-auto"
+    <div
+      ref={scrollContainerRef}
+      className="static-page-scroll starfield-bg absolute top-0 left-0 w-full h-screen bg-[#0a192f] text-white overflow-y-auto"
     >
-      <button 
-        onClick={() => setPage('main')} 
-        className="fixed top-4 left-4 z-50 flex items-center gap-2 text-xs md:text-sm px-3 py-2 border border-teal-300 text-teal-300 rounded-md hover:bg-teal-400/10 hover:shadow-lg transition-all"
-      >
-        <ArrowLeftIcon />
-        Back to Satellite
-      </button>
+      {showBackButton && (
+        <button
+          onClick={() => setPage('main')}
+          className="hidden md:flex fixed top-4 left-4 z-50 items-center gap-2 text-xs md:text-sm px-3 py-2 border border-teal-300 text-teal-300 rounded-md hover:bg-teal-400/10 hover:shadow-lg transition-all"
+        >
+          <ArrowLeftIcon />
+          Back to Satellite
+        </button>
+      )}
+
+      {/* Mobile sticky header with dropdown navigation (issues #3, #4) */}
+      <header className="md:hidden fixed top-0 left-0 w-full z-50 bg-[#0a192f]/90 backdrop-blur-md border-b border-slate-800/50">
+        <div className="flex items-center justify-between px-4 py-3">
+          {showBackButton ? (
+            <button
+              onClick={() => setPage('main')}
+              className="flex items-center gap-2 text-xs px-3 py-2 border border-teal-300 text-teal-300 rounded-md hover:bg-teal-400/10 transition-all"
+            >
+              <ArrowLeftIcon />
+              Satellite
+            </button>
+          ) : (
+            <span className="text-teal-300 font-bold tracking-wider text-sm">GREESH VARTHAN</span>
+          )}
+          <button
+            onClick={() => setMenuOpen(open => !open)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+            className="p-2 border border-teal-300 text-teal-300 rounded-md hover:bg-teal-400/10 transition-all"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              {menuOpen
+                ? <><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></>
+                : <><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></>}
+            </svg>
+          </button>
+        </div>
+        {menuOpen && (
+          <nav className="border-t border-slate-800/50">
+            <ul className="flex flex-col">
+              {sections.map(section => (
+                <li key={section.id}>
+                  <a
+                    href={`#${section.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(section);
+                      setMenuOpen(false);
+                    }}
+                    className={`block px-6 py-3 font-mono text-sm ${activeSection === section.id ? 'text-teal-300' : 'text-slate-300'} hover:text-teal-300 transition-colors`}
+                  >
+                    {section.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+      </header>
 
       <div className="relative md:flex">
         <aside className="hidden md:block md:w-1/3 lg:w-1/4 md:sticky md:top-0 md:h-screen md:py-24 md:px-6 lg:px-12 md:flex md:flex-col justify-between">
@@ -77,9 +168,11 @@ const StaticPage = ({ setPage }) => {
             <h2 className="text-xl lg:text-2xl font-light text-white mt-2">
               Aerospace Engineer
             </h2>
-            <P className="mt-4 text-slate-400">
-              Masters student in Aeronautics and Astronautics at UW
-            </P>
+            <div className="telemetry-strip mt-5">
+              <div><span className="t-key">LOC&nbsp;&nbsp;</span><span className="t-val">SEATTLE, WA</span></div>
+              <div><span className="t-key">PRG&nbsp;&nbsp;</span><span className="t-val">UW MS AERO/ASTRO · DEC 2026</span></div>
+              <div><span className="t-key">STS&nbsp;&nbsp;</span><span className="status-dot"></span><span className="t-val">OPEN TO ENGINEERING ROLES</span></div>
+            </div>
             
             <nav className="mt-12">
               <ul className="flex flex-col gap-y-3">
@@ -89,12 +182,7 @@ const StaticPage = ({ setPage }) => {
                       href={`#${section.id}`} 
                       onClick={(e) => {
                         e.preventDefault();
-                        if (section.ref.current) {
-                          scrollContainerRef.current.scrollTo({
-                            top: section.ref.current.offsetTop - 80,
-                            behavior: 'smooth'
-                          });
-                        }
+                        scrollToSection(section);
                       }}
                       className={`font-mono text-slate-400 hover:text-teal-300 transition-all duration-200 ${activeSection === section.id ? 'nav-link-active' : ''}`}
                     >
@@ -125,8 +213,8 @@ const StaticPage = ({ setPage }) => {
             </h2>
           </div>
 
-          <section ref={aboutRef} id="about" className="mb-24 scroll-mt-24">
-            <SectionTitle>ABOUT</SectionTitle>
+          <section ref={aboutRef} id="about" className="mb-24 scroll-mt-24 reveal">
+            <SectionTitle module="MAIN_BUS">ABOUT</SectionTitle>
             <div className="flex flex-col lg:flex-row lg:justify-evenly items-center gap-16">
               <div className="flex-shrink-0">
                 <img 
@@ -142,8 +230,8 @@ const StaticPage = ({ setPage }) => {
             </div>
           </section>
           
-          <section ref={experienceRef} id="experience" className="mb-24 scroll-mt-24">
-            <SectionTitle>EXPERIENCE</SectionTitle>
+          <section ref={experienceRef} id="experience" className="mb-24 scroll-mt-24 reveal">
+            <SectionTitle module="SOLAR_ARRAY_R">EXPERIENCE</SectionTitle>
               <div className="experience-timeline">
                 <div className="timeline-item">
                   <div className="timeline-icon"></div>
@@ -151,14 +239,28 @@ const StaticPage = ({ setPage }) => {
                     <h3 className="text-white font-semibold">Mechanical Design Engineer | Elementrailer</h3>
                     <p className="text-xs text-slate-300 mb-2">Oct 2025 - Present</p>
                     <ul className="list-none pl-4 text-slate-300">
-                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Create and iterate SolidWorks/Onshape models for trailer structural sub-systems (frame, suspension, and battery cradle).</li>
-                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Conduct ANSYS structural, fatigue, and thermal analyses for the 10k lb-GVWR chassis and mounting systems.</li>
-                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Support materials research, focusing on lightweight and durable design for aerospace-grade trailer applications.</li>
-                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Build the team's engineering software: a Python electro-thermal battery model with a GUI, used for sizing and cooling trade studies.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Design the frame, suspension, and battery enclosure for a 10,000 lb GVWR electric trailer in SolidWorks/Onshape, from concept through drawings and BOMs released to manufacturing and suppliers.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Root-caused a recurring assembly failure where every part passed inspection: unmanaged tolerance chains on legacy drawings. Fixed the drawings and the release process behind them, cutting fit and rework issues about 25%.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Conduct ANSYS structural, fatigue, and thermal analyses on the chassis and mounting systems; drove reinforcement that raised minimum safety factor from 1.8 to 2.3.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Build the team's engineering software: a Python electro-thermal battery model with a GUI, used for sizing and cooling trade studies and correlated against prototype test data.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Coordinate directly with vendors in China on chassis, battery, and cable components to keep prototype builds on schedule.</li>
                     </ul>
                   </div>
                 </div>
-                
+
+                <div className="timeline-item">
+                  <div className="timeline-icon"></div>
+                  <div className="timeline-content">
+                    <h3 className="text-white font-semibold">Graduate Researcher, MS Thesis | University of Washington</h3>
+                    <p className="text-xs text-slate-300 mb-2">Sep 2024 - Present</p>
+                    <ul className="list-none pl-4 text-slate-300">
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Run an ASTM D6415 curved-beam test campaign on chopped-prepreg discontinuous fiber composites, spanning bend radius, laminate thickness, and platelet geometry, to evaluate the standard as a design-allowables method.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Instrument tests with camera-based DIC strain measurement: authored the camera-calibration work instructions and wrote an independent Python DIC solver as a cross-check on GOM Correlate.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Reduce failure data through the Lekhnitskii closed-form solution to interlaminar strength and B-basis design allowable estimates, identifying failure modes by microscopy and verifying fiber orientation with micro-CT.</li>
+                    </ul>
+                  </div>
+                </div>
+
                 <div className="timeline-item">
                   <div className="timeline-icon"></div>
                   <div className="timeline-content">
@@ -181,13 +283,27 @@ const StaticPage = ({ setPage }) => {
                         <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Design and analysis of advanced propeller systems for autonomous space exploration bots, tailored for operation in low-gravity and vacuum environments.</li>
                         <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Presented design findings and recommendations of the propeller systems to senior engineers and contributed to iterative design improvements.</li>
                         <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Employed STAR-CCM+ to perform detailed CFD simulations, optimizing the aerodynamic performance and efficiency of propeller systems under provided conditions.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Worked on-site at a manufacturing vendor facility to fast-track design and development of hardware for the Gaganyaan mission, India's first human spaceflight program.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="timeline-item">
+                  <div className="timeline-icon"></div>
+                  <div className="timeline-content">
+                    <h3 className="text-white font-semibold">Software Development Intern | Single Point Solutions Pvt. Ltd.</h3>
+                    <p className="text-xs text-slate-300 mb-2">Jun 2023 - Jul 2023 · Hyderabad, India</p>
+                    <ul className="list-none pl-4 text-slate-300">
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Using Python, automated routine data processing tasks and performed small-scale data analysis with NumPy and Pandas.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Contributed to internal Python tools alongside the development team, working within their code review and delivery process.</li>
                     </ul>
                   </div>
                 </div>
               </div>
           </section>
           
-          <section ref={skillsRef} id="skills" className="mb-24 scroll-mt-24">
+          <section ref={skillsRef} id="skills" className="mb-24 scroll-mt-24 reveal">
+            <span className="module-eyebrow" style={{ textAlign: 'center' }}>MODULE // COMMS_DISH</span>
             <div className="skill-tree">
               {/* Main Title Box */}
               <div className="bg-slate-900 border border-teal-300 text-teal-300 font-bold px-6 py-3 rounded-md shadow-lg">
@@ -226,36 +342,65 @@ const StaticPage = ({ setPage }) => {
                     ))}
                   </div>
                 </div>
+
+                {/* Branch 4: Spoken Languages */}
+                <div className="skill-branch">
+                  <div className="skill-category-title">Spoken Languages</div>
+                  <div className="skill-tags">
+                    {skillsData.spoken.map(skill => (
+                      <span key={skill} className="skill-tag">{skill}</span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </section>
           
-          <section ref={projectsRef} id="projects" className="mb-24 scroll-mt-24">
-            <SectionTitle>✦ PROJECTS</SectionTitle>
+          <section ref={projectsRef} id="projects" className="mb-24 scroll-mt-24 reveal">
+            <SectionTitle module="SOLAR_ARRAY_L">PROJECTS</SectionTitle>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {projectsData.map(p => (
-                <div key={p.id} className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 flex flex-col transition-all hover:shadow-lg hover:border-teal-300/50">
-                  <img 
-                    src={p.image} 
+                <div key={p.id} className="hud-card bg-slate-900/50 border border-slate-700 rounded-lg p-6 flex flex-col hover:shadow-lg hover:border-teal-300/50">
+                  <img
+                    src={p.image}
                     alt={`Visualization for ${p.title}`}
                     className="rounded-md w-full h-48 md:h-64 object-fit mb-4 border border-slate-600"
                     onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/0a192f/FFFFFF?text=Image+Not+Found'; }}
                   />
                   <h3 className="text-xl font-bold text-teal-300 mb-2">{p.title}</h3>
                   <p className="text-white font-light flex-grow">{p.long}</p>
+                  {p.url && (
+                    <a href={p.url} target="_blank" rel="noopener noreferrer" className="visit-link">VISIT ↗</a>
+                  )}
                 </div>
               ))}
             </div>
           </section>
 
-          <section ref={contactRef} id="contact" className="mb-24 scroll-mt-24">
-            <SectionTitle>✦ CONTACT</SectionTitle>
+          <section ref={patentsRef} id="patents" className="mb-24 scroll-mt-24 reveal">
+            <SectionTitle module="PAYLOAD">PATENTS</SectionTitle>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="hud-card bg-slate-900/50 border border-slate-700 rounded-lg p-6 hover:shadow-lg hover:border-teal-300/50">
+                <h3 className="text-xl font-bold text-teal-300 mb-2">Dynamic Oxygen Concentration Machine Based on Fuzzy Logic (OCM)</h3>
+                <p className="text-xs text-slate-300 mb-3 font-mono">ID 357353-001 · Awarded Jan 27, 2022 · IP India Design Registry</p>
+                <p className="text-white font-light">A fuzzy-logic-controlled machine that dynamically adjusts oxygen concentration to demand rather than delivering a fixed output.</p>
+              </div>
+              <div className="hud-card bg-slate-900/50 border border-slate-700 rounded-lg p-6 hover:shadow-lg hover:border-teal-300/50">
+                <h3 className="text-xl font-bold text-teal-300 mb-2">Dynamic Oxygen Supply Machine Based on Fuzzy Logic (OSM)</h3>
+                <p className="text-xs text-slate-300 mb-3 font-mono">ID 357354-001 · Awarded Jan 27, 2022 · IP India Design Registry</p>
+                <p className="text-white font-light">A companion fuzzy-logic system that modulates oxygen supply delivery dynamically in response to changing conditions.</p>
+              </div>
+            </div>
+          </section>
+
+          <section ref={contactRef} id="contact" className="mb-24 scroll-mt-24 reveal">
+            <SectionTitle module="ANTENNA">CONTACT</SectionTitle>
             <P>I'm always open to discussing new projects, creative ideas, or opportunities. Feel free to reach out using the form below or connect with me on social media.</P>
             
             {submitted ? (
               <div className="form-success-message">
                 <p className="font-semibold">Thank you!</p>
-                <p>Thanks for contacting me! Your message has been received :)</p>
+                <p>Your email app should have opened with the message prefilled — just hit send. If it didn't, email me directly at greeshv03@gmail.com.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">

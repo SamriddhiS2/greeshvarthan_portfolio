@@ -158,14 +158,35 @@ const ThreeDViewer = ({ onPartClick, showLabels }) => {
             }
         };
 
+        // touch support: map touch gestures onto the same drag/tap logic
+        const onTouchStart = (e) => {
+            if (e.touches.length !== 1) return;
+            const t = e.touches[0];
+            onMouseDown({ clientX: t.clientX, clientY: t.clientY });
+        };
+        const onTouchMove = (e) => {
+            if (e.touches.length !== 1) return;
+            const t = e.touches[0];
+            onMouseMove({ clientX: t.clientX, clientY: t.clientY });
+        };
+        const onTouchEnd = (e) => {
+            const t = e.changedTouches[0];
+            if (t) onMouseUp({ clientX: t.clientX, clientY: t.clientY });
+        };
+        const onMouseLeave = () => { isDragging = false; };
+
         mount.addEventListener('mousedown', onMouseDown);
         mount.addEventListener('mouseup', onMouseUp);
         mount.addEventListener('mousemove', onMouseMove);
-        mount.addEventListener('mouseleave', () => { isDragging = false; });
+        mount.addEventListener('mouseleave', onMouseLeave);
+        mount.addEventListener('touchstart', onTouchStart, { passive: true });
+        mount.addEventListener('touchmove', onTouchMove, { passive: true });
+        mount.addEventListener('touchend', onTouchEnd);
 
         const clock = new THREE.Clock();
+        let rafId = null;
         const animate = () => {
-            requestAnimationFrame(animate);
+            rafId = requestAnimationFrame(animate);
 
             const elapsedTime = clock.getElapsedTime();
             if (!isDragging) {
@@ -192,11 +213,14 @@ const ThreeDViewer = ({ onPartClick, showLabels }) => {
                     const labelX = parseFloat(labelData[i].position.x) / 100 * mount.clientWidth;
                     const labelY = parseFloat(labelData[i].position.y) / 100 * mount.clientHeight;
 
-                    label.style.transform = `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`;
-                    line.setAttribute('x1', partX);
-                    line.setAttribute('y1', partY);
-                    line.setAttribute('x2', labelX);
-                    line.setAttribute('y2', labelY);
+                    // guard against NaN/Infinity during initial layout (zero-size mount)
+                    if ([partX, partY, labelX, labelY].every(Number.isFinite)) {
+                        label.style.transform = `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`;
+                        line.setAttribute('x1', partX);
+                        line.setAttribute('y1', partY);
+                        line.setAttribute('x2', labelX);
+                        line.setAttribute('y2', labelY);
+                    }
                 }
             });
             
@@ -207,11 +231,12 @@ const ThreeDViewer = ({ onPartClick, showLabels }) => {
         animate();
 
         const onResize = () => {
-            if (cameraRef.current && mount) {
+            if (!mount || mount.clientWidth === 0 || mount.clientHeight === 0) return;
+            if (cameraRef.current) {
                 cameraRef.current.aspect = mount.clientWidth / mount.clientHeight;
                 cameraRef.current.updateProjectionMatrix();
             }
-            if (renderer && mount) {
+            if (renderer) {
                 renderer.setSize(mount.clientWidth, mount.clientHeight);
             }
         };
@@ -219,15 +244,22 @@ const ThreeDViewer = ({ onPartClick, showLabels }) => {
         onResize();
 
         return () => {
+            if (rafId !== null) cancelAnimationFrame(rafId);
             window.removeEventListener('resize', onResize);
             if (mount) {
                 mount.removeEventListener('mousedown', onMouseDown);
                 mount.removeEventListener('mouseup', onMouseUp);
                 mount.removeEventListener('mousemove', onMouseMove);
+                mount.removeEventListener('mouseleave', onMouseLeave);
+                mount.removeEventListener('touchstart', onTouchStart);
+                mount.removeEventListener('touchmove', onTouchMove);
+                mount.removeEventListener('touchend', onTouchEnd);
             }
             if (renderer.domElement && renderer.domElement.parentElement === mount) {
                 mount.removeChild(renderer.domElement);
             }
+            renderer.dispose();
+            starGeometry.dispose();
         };
     }, [onPartClick, labelData]);
 
@@ -240,6 +272,7 @@ const ThreeDViewer = ({ onPartClick, showLabels }) => {
                         <line
                             key={`line-${data.name}`}
                             ref={el => linesRef.current[i] = el}
+                            x1="0" y1="0" x2="0" y2="0"
                             stroke="#64ffda"
                             strokeWidth="1"
                             strokeDasharray="5 5"

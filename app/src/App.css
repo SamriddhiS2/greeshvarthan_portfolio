@@ -1,10 +1,121 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;700&family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap');
 
 body {
     background-color: #0a192f;
     color: #ccd6f6;
-    font-family: 'Roboto Mono', monospace;
+    font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
     overflow: hidden;
+}
+
+/* Three-voice type system:
+   Chakra Petch  = display (headings, names) - flight-console hardware
+   IBM Plex Sans = body (paragraphs)
+   Roboto Mono   = telemetry (labels, nav, dates, data) */
+h1, h2, h3 {
+    font-family: 'Chakra Petch', 'Roboto Mono', sans-serif;
+    letter-spacing: 0.03em;
+}
+
+.font-mono, .font-telemetry {
+    font-family: 'Roboto Mono', monospace !important;
+}
+
+/* Section eyebrow: satellite module designation carried over from the 3D view */
+.module-eyebrow {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: #64ffda;
+    opacity: 0.65;
+    display: block;
+    margin-bottom: 0.35rem;
+}
+
+/* Sidebar telemetry readout */
+.telemetry-strip {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: #8892b0;
+    border-left: 2px solid rgba(100, 255, 218, 0.35);
+    padding-left: 0.75rem;
+    line-height: 1.9;
+}
+.telemetry-strip .t-key { color: #5a6a8a; }
+.telemetry-strip .t-val { color: #a8b6d4; }
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #64ffda;
+    margin-right: 0.4rem;
+    box-shadow: 0 0 6px rgba(100, 255, 218, 0.8);
+    animation: statusPulse 2.4s ease-in-out infinite;
+}
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+}
+
+/* HUD corner brackets on hover - same motif as the satellite view corners */
+.hud-card {
+    position: relative;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.hud-card::before,
+.hud-card::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-color: #64ffda;
+    border-style: solid;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+}
+.hud-card::before {
+    top: -1px;
+    left: -1px;
+    border-width: 2px 0 0 2px;
+    border-radius: 0.5rem 0 0 0;
+}
+.hud-card::after {
+    bottom: -1px;
+    right: -1px;
+    border-width: 0 2px 2px 0;
+    border-radius: 0 0 0.5rem 0;
+}
+.hud-card:hover {
+    transform: translateY(-3px);
+}
+.hud-card:hover::before,
+.hud-card:hover::after {
+    opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+    .hud-card, .hud-card:hover { transform: none; }
+    .status-dot { animation: none; }
+}
+
+/* Mono visit link on live project cards */
+.visit-link {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    color: #64ffda;
+    border: 1px solid rgba(100, 255, 218, 0.4);
+    border-radius: 0.25rem;
+    padding: 0.3rem 0.7rem;
+    display: inline-block;
+    margin-top: 0.9rem;
+    align-self: flex-start;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.visit-link:hover {
+    background-color: rgba(100, 255, 218, 0.1);
+    border-color: #64ffda;
 }
 
 /* Scrollbar for Static Page */
@@ -82,33 +193,44 @@ html {
   background-color: #38b2ac;
   border-radius: 50%;
   position: relative;
+  z-index: 1; /* the orbiting plane steps between z 0 (behind) and 2 (in front) */
   animation: spin 10s linear infinite;
   box-shadow: 0 0 25px #38b2ac, inset 0 0 15px rgba(0,0,0,0.2);
   background-image: linear-gradient(135deg, #99f6e4 25%, #38b2ac 25%, #38b2ac 50%, #99f6e4 50%, #99f6e4 75%, #38b2ac 75%, #38b2ac 100%);
   background-size: 40px 40px;
 }
 
-.orbit-path {
+/* 3D spiral orbit: elliptical path, scales up in front of the globe and
+   shrinks + drops behind it on the far side (z-index steps at the sides) */
+.orbit-plane-3d {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 250px;
-  height: 250px;
-  margin-top: -125px;
-  margin-left: -125px;
-  border-radius: 50%;
-  animation: orbit 2s linear infinite;
-}
-
-.orbit-plane {
-  position: absolute;
-  top: -16px;
-  left: 50%;
-  margin-left: -16px;
   width: 32px;
   height: 32px;
+  margin: -16px 0 0 -16px;
   color: white;
-  transform: rotate(90deg);
+  font-size: 1.6rem; /* AirplaneIcon sizes itself in em (1.25em ≈ 32px here) */
+  filter: drop-shadow(0 0 4px rgba(100, 255, 218, 0.6));
+  animation: orbit3d 2s linear infinite; /* one full pass per 2s transition */
+}
+
+@keyframes orbit3d {
+  0%    { transform: translate(160px, 0)     scale(0.85) rotate(135deg); z-index: 2; }
+  12.5% { transform: translate(113px, 32px)  scale(1.02) rotate(180deg); z-index: 2; }
+  25%   { transform: translate(0, 45px)      scale(1.15) rotate(225deg); z-index: 2; }
+  37.5% { transform: translate(-113px, 32px) scale(1.02) rotate(270deg); z-index: 2; }
+  50%   { transform: translate(-160px, 0)    scale(0.85) rotate(315deg); z-index: 0; }
+  62.5% { transform: translate(-113px, -32px) scale(0.68) rotate(360deg); z-index: 0; }
+  75%   { transform: translate(0, -45px)     scale(0.55) rotate(405deg); z-index: 0; }
+  87.5% { transform: translate(113px, -32px) scale(0.68) rotate(450deg); z-index: 0; }
+  100%  { transform: translate(160px, 0)     scale(0.85) rotate(495deg); z-index: 2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-plane-3d, .globe {
+    animation: none;
+  }
 }
 
 @keyframes fadeIn {
@@ -117,11 +239,6 @@ html {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes orbit {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
@@ -263,9 +380,43 @@ html {
 .skill-tag {
   background-color: #334155;
   color: #94a3b8;
-  padding: 0.25rem 0.75rem;
+  padding: 0.3rem 0.85rem;
   border-radius: 9999px;
   font-size: 0.875rem;
+  text-align: center;
+}
+
+/* Fade-in-on-scroll reveal for static page sections */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* CSS starfield to match the satellite view's backdrop */
+.starfield-bg {
+  background-color: #0a192f;
+  background-image:
+    radial-gradient(1px 1px at 25px 35px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 150px 120px, rgba(255, 255, 255, 0.35), transparent),
+    radial-gradient(1.5px 1.5px at 310px 60px, rgba(100, 255, 218, 0.4), transparent),
+    radial-gradient(1px 1px at 420px 200px, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1.5px 1.5px at 520px 90px, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 80px 250px, rgba(255, 255, 255, 0.45), transparent),
+    radial-gradient(1px 1px at 560px 260px, rgba(255, 255, 255, 0.3), transparent);
+  background-size: 600px 300px;
+  background-repeat: repeat;
 }
 
 /* New Experience Timeline Styles */
