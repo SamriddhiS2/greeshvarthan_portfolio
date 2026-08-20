@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.88c23b9b.css",
-    "main.js": "/static/js/main.a67f6e89.js",
+    "main.js": "/static/js/main.92989732.js",
     "static/media/cubesat.png": "/static/media/cubesat.95c411d1f8a22b4f6c0f.png",
     "static/media/destified.png": "/static/media/destified.ac1417226565c7c86097.png",
     "static/media/hypersonic_missile.png": "/static/media/hypersonic_missile.791f2fcfc1ca9c5fc649.png",
@@ -12,10 +12,10 @@
     "static/media/spl.png": "/static/media/spl.f121a05c784e87b6f8f8.png",
     "index.html": "/index.html",
     "main.88c23b9b.css.map": "/static/css/main.88c23b9b.css.map",
-    "main.a67f6e89.js.map": "/static/js/main.a67f6e89.js.map"
+    "main.92989732.js.map": "/static/js/main.92989732.js.map"
   },
   "entrypoints": [
     "static/css/main.88c23b9b.css",
-    "static/js/main.a67f6e89.js"
+    "static/js/main.92989732.js"
   ]
 }
