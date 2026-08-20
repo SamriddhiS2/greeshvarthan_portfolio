@@ -109,6 +109,13 @@ html {
   height: 32px;
   color: white;
   transform: rotate(90deg);
+  font-size: 1.6rem; /* AirplaneIcon sizes itself in em (1.25em ≈ 32px here) */
+  filter: drop-shadow(0 0 4px rgba(100, 255, 218, 0.6));
+}
+@media (prefers-reduced-motion: reduce) {
+  .orbit-path, .globe {
+    animation: none;
+  }
 }
 
 @keyframes fadeIn {
