@@ -5,8 +5,8 @@ import { projectsData } from '../data/projectsData';
 import { skillsData } from '../data/skillsData';
 import headshot from '../assets/headshot.png';
 
-const StaticPage = ({ setPage }) => {
-  const [activeSection, setActiveSection] = useState('about');
+const StaticPage = ({ setPage, initialSection }) => {
+  const [activeSection, setActiveSection] = useState(initialSection || 'about');
   const scrollContainerRef = useRef(null);
   const aboutRef = useRef(null);
   const experienceRef = useRef(null);
@@ -45,16 +45,33 @@ const StaticPage = ({ setPage }) => {
     return () => container.removeEventListener('scroll', handleScroll);
   }, [sections]);
 
+  // deep link: jump to the requested section once refs are laid out
+  useEffect(() => {
+    if (!initialSection) return;
+    const target = sections.find(s => s.id === initialSection);
+    if (target && target.ref.current && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: target.ref.current.offsetTop - 80 });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    const form = e.target;
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+    const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:greeshv03@gmail.com?subject=${subject}&body=${body}`;
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
-    }, 1000);
+    }, 600);
   };
 
   return (
@@ -96,6 +113,7 @@ const StaticPage = ({ setPage }) => {
                             top: section.ref.current.offsetTop - 80,
                             behavior: 'smooth'
                           });
+                          window.history.replaceState(null, '', `#${section.id}`);
                         }
                       }}
                       className={`font-mono text-slate-400 hover:text-teal-300 transition-all duration-200 ${activeSection === section.id ? 'nav-link-active' : ''}`}
@@ -310,7 +328,7 @@ const StaticPage = ({ setPage }) => {
             {submitted ? (
               <div className="form-success-message">
                 <p className="font-semibold">Thank you!</p>
-                <p>Thanks for contacting me! Your message has been received :)</p>
+                <p>Your email app should have opened with the message prefilled — just hit send. If it didn't, email me directly at greeshv03@gmail.com.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">

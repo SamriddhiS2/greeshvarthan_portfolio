@@ -8,8 +8,13 @@ import GlobeTransition from './components/GlobeTransition';
 import { AirplaneIcon } from './components/Icons';
 import './App.css';
 
+const DEEP_LINK_SECTIONS = ['about', 'experience', 'skills', 'projects', 'patents', 'contact'];
+
 export default function App() {
-  const [page, setPage] = useState('main');
+  // deep links like greeshvarthan.com/#patents open the static page at that section
+  const initialHash = window.location.hash.replace('#', '');
+  const initialSection = DEEP_LINK_SECTIONS.includes(initialHash) ? initialHash : null;
+  const [page, setPage] = useState(initialSection ? 'static' : 'main');
   const [selectedSection, setSelectedSection] = useState(null);
   const [showLabels, setShowLabels] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -55,7 +60,7 @@ export default function App() {
         return <ProjectsPage setPage={handleBackToMainClick} />;
       
       case 'static':
-        return <StaticPage setPage={handleBackToMainClick} />;
+        return <StaticPage setPage={handleBackToMainClick} initialSection={initialSection} />;
         
       case 'main':
       default:
