@@ -168,9 +168,11 @@ const StaticPage = ({ setPage, initialSection, showBackButton = true }) => {
             <h2 className="text-xl lg:text-2xl font-light text-white mt-2">
               Aerospace Engineer
             </h2>
-            <P className="mt-4 text-slate-400">
-              Masters student in Aeronautics and Astronautics at UW
-            </P>
+            <div className="telemetry-strip mt-5">
+              <div><span className="t-key">LOC&nbsp;&nbsp;</span><span className="t-val">SEATTLE, WA</span></div>
+              <div><span className="t-key">PRG&nbsp;&nbsp;</span><span className="t-val">UW MS AERO/ASTRO · DEC 2026</span></div>
+              <div><span className="t-key">STS&nbsp;&nbsp;</span><span className="status-dot"></span><span className="t-val">OPEN TO ENGINEERING ROLES</span></div>
+            </div>
             
             <nav className="mt-12">
               <ul className="flex flex-col gap-y-3">
@@ -212,7 +214,7 @@ const StaticPage = ({ setPage, initialSection, showBackButton = true }) => {
           </div>
 
           <section ref={aboutRef} id="about" className="mb-24 scroll-mt-24 reveal">
-            <SectionTitle>ABOUT</SectionTitle>
+            <SectionTitle module="MAIN_BUS">ABOUT</SectionTitle>
             <div className="flex flex-col lg:flex-row lg:justify-evenly items-center gap-16">
               <div className="flex-shrink-0">
                 <img 
@@ -229,7 +231,7 @@ const StaticPage = ({ setPage, initialSection, showBackButton = true }) => {
           </section>
           
           <section ref={experienceRef} id="experience" className="mb-24 scroll-mt-24 reveal">
-            <SectionTitle>EXPERIENCE</SectionTitle>
+            <SectionTitle module="SOLAR_ARRAY_R">EXPERIENCE</SectionTitle>
               <div className="experience-timeline">
                 <div className="timeline-item">
                   <div className="timeline-icon"></div>
@@ -301,6 +303,7 @@ const StaticPage = ({ setPage, initialSection, showBackButton = true }) => {
           </section>
           
           <section ref={skillsRef} id="skills" className="mb-24 scroll-mt-24 reveal">
+            <span className="module-eyebrow" style={{ textAlign: 'center' }}>MODULE // COMMS_DISH</span>
             <div className="skill-tree">
               {/* Main Title Box */}
               <div className="bg-slate-900 border border-teal-300 text-teal-300 font-bold px-6 py-3 rounded-md shadow-lg">
@@ -354,32 +357,35 @@ const StaticPage = ({ setPage, initialSection, showBackButton = true }) => {
           </section>
           
           <section ref={projectsRef} id="projects" className="mb-24 scroll-mt-24 reveal">
-            <SectionTitle>✦ PROJECTS</SectionTitle>
+            <SectionTitle module="SOLAR_ARRAY_L">PROJECTS</SectionTitle>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {projectsData.map(p => (
-                <div key={p.id} className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 flex flex-col transition-all hover:shadow-lg hover:border-teal-300/50">
-                  <img 
-                    src={p.image} 
+                <div key={p.id} className="hud-card bg-slate-900/50 border border-slate-700 rounded-lg p-6 flex flex-col hover:shadow-lg hover:border-teal-300/50">
+                  <img
+                    src={p.image}
                     alt={`Visualization for ${p.title}`}
                     className="rounded-md w-full h-48 md:h-64 object-fit mb-4 border border-slate-600"
                     onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/0a192f/FFFFFF?text=Image+Not+Found'; }}
                   />
                   <h3 className="text-xl font-bold text-teal-300 mb-2">{p.title}</h3>
                   <p className="text-white font-light flex-grow">{p.long}</p>
+                  {p.url && (
+                    <a href={p.url} target="_blank" rel="noopener noreferrer" className="visit-link">VISIT ↗</a>
+                  )}
                 </div>
               ))}
             </div>
           </section>
 
           <section ref={patentsRef} id="patents" className="mb-24 scroll-mt-24 reveal">
-            <SectionTitle>✦ PATENTS</SectionTitle>
+            <SectionTitle module="PAYLOAD">PATENTS</SectionTitle>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 transition-all hover:shadow-lg hover:border-teal-300/50">
+              <div className="hud-card bg-slate-900/50 border border-slate-700 rounded-lg p-6 hover:shadow-lg hover:border-teal-300/50">
                 <h3 className="text-xl font-bold text-teal-300 mb-2">Dynamic Oxygen Concentration Machine Based on Fuzzy Logic (OCM)</h3>
                 <p className="text-xs text-slate-300 mb-3 font-mono">ID 357353-001 · Awarded Jan 27, 2022 · IP India Design Registry</p>
                 <p className="text-white font-light">A fuzzy-logic-controlled machine that dynamically adjusts oxygen concentration to demand rather than delivering a fixed output.</p>
               </div>
-              <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 transition-all hover:shadow-lg hover:border-teal-300/50">
+              <div className="hud-card bg-slate-900/50 border border-slate-700 rounded-lg p-6 hover:shadow-lg hover:border-teal-300/50">
                 <h3 className="text-xl font-bold text-teal-300 mb-2">Dynamic Oxygen Supply Machine Based on Fuzzy Logic (OSM)</h3>
                 <p className="text-xs text-slate-300 mb-3 font-mono">ID 357354-001 · Awarded Jan 27, 2022 · IP India Design Registry</p>
                 <p className="text-white font-light">A companion fuzzy-logic system that modulates oxygen supply delivery dynamically in response to changing conditions.</p>
@@ -388,7 +394,7 @@ const StaticPage = ({ setPage, initialSection, showBackButton = true }) => {
           </section>
 
           <section ref={contactRef} id="contact" className="mb-24 scroll-mt-24 reveal">
-            <SectionTitle>✦ CONTACT</SectionTitle>
+            <SectionTitle module="ANTENNA">CONTACT</SectionTitle>
             <P>I'm always open to discussing new projects, creative ideas, or opportunities. Feel free to reach out using the form below or connect with me on social media.</P>
             
             {submitted ? (

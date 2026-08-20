@@ -13,15 +13,18 @@ const ProjectsPage = ({ setPage }) => (
         </header>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4 md:px-8 py-12 pb-20">
             {projectsData.map(p => (
-                <div key={p.id} className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 flex flex-col">
-                    <img 
-                        src={p.image} 
+                <div key={p.id} className="hud-card bg-slate-900/50 border border-slate-700 rounded-lg p-6 flex flex-col hover:border-teal-300/50">
+                    <img
+                        src={p.image}
                         alt={`Visualization for ${p.title}`}
                         className="rounded-md w-full h-48 object-fit mb-4 border border-slate-600"
                         onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/0a192f/FFFFFF?text=Image+Not+Found'; }}
                     />
                     <h2 className="text-xl font-bold text-teal-300 mb-2">{p.title}</h2>
                     <p className="text-white font-light flex-grow">{p.long}</p>
+                    {p.url && (
+                        <a href={p.url} target="_blank" rel="noopener noreferrer" className="visit-link">VISIT ↗</a>
+                    )}
                 </div>
             ))}
         </div>
