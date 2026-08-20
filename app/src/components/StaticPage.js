@@ -12,6 +12,7 @@ const StaticPage = ({ setPage }) => {
   const experienceRef = useRef(null);
   const skillsRef = useRef(null);
   const projectsRef = useRef(null);
+  const patentsRef = useRef(null);
   const contactRef = useRef(null);
 
   const sections = useMemo(() => [
@@ -19,6 +20,7 @@ const StaticPage = ({ setPage }) => {
     { id: 'experience', title: 'Experience', ref: experienceRef },
     { id: 'skills', title: 'Skills', ref: skillsRef },
     { id: 'projects', title: 'Projects', ref: projectsRef },
+    { id: 'patents', title: 'Patents', ref: patentsRef },
     { id: 'contact', title: 'Contact', ref: contactRef },
   ], []);
 
@@ -151,14 +153,28 @@ const StaticPage = ({ setPage }) => {
                     <h3 className="text-white font-semibold">Mechanical Design Engineer | Elementrailer</h3>
                     <p className="text-xs text-slate-300 mb-2">Oct 2025 - Present</p>
                     <ul className="list-none pl-4 text-slate-300">
-                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Create and iterate SolidWorks/Onshape models for trailer structural sub-systems (frame, suspension, and battery cradle).</li>
-                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Conduct ANSYS structural, fatigue, and thermal analyses for the 10k lb-GVWR chassis and mounting systems.</li>
-                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Support materials research, focusing on lightweight and durable design for aerospace-grade trailer applications.</li>
-                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Build the team's engineering software: a Python electro-thermal battery model with a GUI, used for sizing and cooling trade studies.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Design the frame, suspension, and battery enclosure for a 10,000 lb GVWR electric trailer in SolidWorks/Onshape, from concept through drawings and BOMs released to manufacturing and suppliers.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Root-caused a recurring assembly failure where every part passed inspection: unmanaged tolerance chains on legacy drawings. Fixed the drawings and the release process behind them, cutting fit and rework issues about 25%.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Conduct ANSYS structural, fatigue, and thermal analyses on the chassis and mounting systems; drove reinforcement that raised minimum safety factor from 1.8 to 2.3.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Build the team's engineering software: a Python electro-thermal battery model with a GUI, used for sizing and cooling trade studies and correlated against prototype test data.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Coordinate directly with vendors in China on chassis, battery, and cable components to keep prototype builds on schedule.</li>
                     </ul>
                   </div>
                 </div>
-                
+
+                <div className="timeline-item">
+                  <div className="timeline-icon"></div>
+                  <div className="timeline-content">
+                    <h3 className="text-white font-semibold">Graduate Researcher, MS Thesis | University of Washington</h3>
+                    <p className="text-xs text-slate-300 mb-2">Sep 2024 - Present</p>
+                    <ul className="list-none pl-4 text-slate-300">
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Run an ASTM D6415 curved-beam test campaign on chopped-prepreg discontinuous fiber composites, spanning bend radius, laminate thickness, and platelet geometry, to evaluate the standard as a design-allowables method.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Instrument tests with camera-based DIC strain measurement: authored the camera-calibration work instructions and wrote an independent Python DIC solver as a cross-check on GOM Correlate.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Reduce failure data through the Lekhnitskii closed-form solution to interlaminar strength and B-basis design allowable estimates, identifying failure modes by microscopy and verifying fiber orientation with micro-CT.</li>
+                    </ul>
+                  </div>
+                </div>
+
                 <div className="timeline-item">
                   <div className="timeline-icon"></div>
                   <div className="timeline-content">
@@ -181,6 +197,19 @@ const StaticPage = ({ setPage }) => {
                         <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Design and analysis of advanced propeller systems for autonomous space exploration bots, tailored for operation in low-gravity and vacuum environments.</li>
                         <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Presented design findings and recommendations of the propeller systems to senior engineers and contributed to iterative design improvements.</li>
                         <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Employed STAR-CCM+ to perform detailed CFD simulations, optimizing the aerodynamic performance and efficiency of propeller systems under provided conditions.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Worked on-site at a manufacturing vendor facility to fast-track design and development of hardware for the Gaganyaan mission, India's first human spaceflight program.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="timeline-item">
+                  <div className="timeline-icon"></div>
+                  <div className="timeline-content">
+                    <h3 className="text-white font-semibold">Software Development Intern | Single Point Solutions Pvt. Ltd.</h3>
+                    <p className="text-xs text-slate-300 mb-2">Jun 2023 - Jul 2023 · Hyderabad, India</p>
+                    <ul className="list-none pl-4 text-slate-300">
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Using Python, automated routine data processing tasks and performed small-scale data analysis with NumPy and Pandas.</li>
+                        <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Contributed to internal Python tools alongside the development team, working within their code review and delivery process.</li>
                     </ul>
                   </div>
                 </div>
@@ -226,6 +255,16 @@ const StaticPage = ({ setPage }) => {
                     ))}
                   </div>
                 </div>
+
+                {/* Branch 4: Spoken Languages */}
+                <div className="skill-branch">
+                  <div className="skill-category-title">Spoken Languages</div>
+                  <div className="skill-tags">
+                    {skillsData.spoken.map(skill => (
+                      <span key={skill} className="skill-tag">{skill}</span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -245,6 +284,22 @@ const StaticPage = ({ setPage }) => {
                   <p className="text-white font-light flex-grow">{p.long}</p>
                 </div>
               ))}
+            </div>
+          </section>
+
+          <section ref={patentsRef} id="patents" className="mb-24 scroll-mt-24">
+            <SectionTitle>✦ PATENTS</SectionTitle>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 transition-all hover:shadow-lg hover:border-teal-300/50">
+                <h3 className="text-xl font-bold text-teal-300 mb-2">Dynamic Oxygen Concentration Machine Based on Fuzzy Logic (OCM)</h3>
+                <p className="text-xs text-slate-300 mb-3 font-mono">ID 357353-001 · Awarded Jan 27, 2022 · IP India Design Registry</p>
+                <p className="text-white font-light">A fuzzy-logic-controlled machine that dynamically adjusts oxygen concentration to demand rather than delivering a fixed output.</p>
+              </div>
+              <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 transition-all hover:shadow-lg hover:border-teal-300/50">
+                <h3 className="text-xl font-bold text-teal-300 mb-2">Dynamic Oxygen Supply Machine Based on Fuzzy Logic (OSM)</h3>
+                <p className="text-xs text-slate-300 mb-3 font-mono">ID 357354-001 · Awarded Jan 27, 2022 · IP India Design Registry</p>
+                <p className="text-white font-light">A companion fuzzy-logic system that modulates oxygen supply delivery dynamically in response to changing conditions.</p>
+              </div>
             </div>
           </section>
 
