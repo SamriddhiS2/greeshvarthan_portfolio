@@ -5,8 +5,9 @@ import { projectsData } from '../data/projectsData';
 import { skillsData } from '../data/skillsData';
 import headshot from '../assets/headshot.png';
 
-const StaticPage = ({ setPage, initialSection }) => {
+const StaticPage = ({ setPage, initialSection, showBackButton = true }) => {
   const [activeSection, setActiveSection] = useState(initialSection || 'about');
+  const [menuOpen, setMenuOpen] = useState(false);
   const scrollContainerRef = useRef(null);
   const aboutRef = useRef(null);
   const experienceRef = useRef(null);
@@ -24,26 +25,35 @@ const StaticPage = ({ setPage, initialSection }) => {
     { id: 'contact', title: 'Contact', ref: contactRef },
   ], []);
 
+  // Scroll-spy via IntersectionObserver: no per-scroll-event DOM reads (issue #15)
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
-
-    const handleScroll = () => {
-      const scrollPos = container.scrollTop;
-      let currentSection = sections[0].id;
-      const offset = 100;
-
-      for (const section of sections) {
-        if (section.ref.current && section.ref.current.offsetTop - offset <= scrollPos) {
-          currentSection = section.id;
-        }
-      }
-      setActiveSection(currentSection);
-    };
-
-    container.addEventListener('scroll', handleScroll);
-    return () => container.removeEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActiveSection(entry.target.id);
+      });
+    }, { root: container, rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+    sections.forEach(s => { if (s.ref.current) observer.observe(s.ref.current); });
+    return () => observer.disconnect();
   }, [sections]);
+
+  // Fade-in-on-scroll reveal (issue #12); reveals once, then stops observing
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const els = container.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { root: container, rootMargin: '0px 0px -10% 0px' });
+    els.forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   // deep link: jump to the requested section once refs are laid out
   useEffect(() => {
@@ -74,18 +84,80 @@ const StaticPage = ({ setPage, initialSection }) => {
     }, 600);
   };
 
+  const scrollToSection = (section) => {
+    if (section.ref.current && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        top: section.ref.current.offsetTop - 80,
+        behavior: 'smooth'
+      });
+      window.history.replaceState(null, '', `#${section.id}`);
+    }
+  };
+
   return (
-    <div 
-      ref={scrollContainerRef} 
-      className="static-page-scroll absolute top-0 left-0 w-full h-screen bg-[#0a192f] text-white overflow-y-auto"
+    <div
+      ref={scrollContainerRef}
+      className="static-page-scroll starfield-bg absolute top-0 left-0 w-full h-screen bg-[#0a192f] text-white overflow-y-auto"
     >
-      <button 
-        onClick={() => setPage('main')} 
-        className="fixed top-4 left-4 z-50 flex items-center gap-2 text-xs md:text-sm px-3 py-2 border border-teal-300 text-teal-300 rounded-md hover:bg-teal-400/10 hover:shadow-lg transition-all"
-      >
-        <ArrowLeftIcon />
-        Back to Satellite
-      </button>
+      {showBackButton && (
+        <button
+          onClick={() => setPage('main')}
+          className="hidden md:flex fixed top-4 left-4 z-50 items-center gap-2 text-xs md:text-sm px-3 py-2 border border-teal-300 text-teal-300 rounded-md hover:bg-teal-400/10 hover:shadow-lg transition-all"
+        >
+          <ArrowLeftIcon />
+          Back to Satellite
+        </button>
+      )}
+
+      {/* Mobile sticky header with dropdown navigation (issues #3, #4) */}
+      <header className="md:hidden fixed top-0 left-0 w-full z-50 bg-[#0a192f]/90 backdrop-blur-md border-b border-slate-800/50">
+        <div className="flex items-center justify-between px-4 py-3">
+          {showBackButton ? (
+            <button
+              onClick={() => setPage('main')}
+              className="flex items-center gap-2 text-xs px-3 py-2 border border-teal-300 text-teal-300 rounded-md hover:bg-teal-400/10 transition-all"
+            >
+              <ArrowLeftIcon />
+              Satellite
+            </button>
+          ) : (
+            <span className="text-teal-300 font-bold tracking-wider text-sm">GREESH VARTHAN</span>
+          )}
+          <button
+            onClick={() => setMenuOpen(open => !open)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+            className="p-2 border border-teal-300 text-teal-300 rounded-md hover:bg-teal-400/10 transition-all"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              {menuOpen
+                ? <><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></>
+                : <><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></>}
+            </svg>
+          </button>
+        </div>
+        {menuOpen && (
+          <nav className="border-t border-slate-800/50">
+            <ul className="flex flex-col">
+              {sections.map(section => (
+                <li key={section.id}>
+                  <a
+                    href={`#${section.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(section);
+                      setMenuOpen(false);
+                    }}
+                    className={`block px-6 py-3 font-mono text-sm ${activeSection === section.id ? 'text-teal-300' : 'text-slate-300'} hover:text-teal-300 transition-colors`}
+                  >
+                    {section.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+      </header>
 
       <div className="relative md:flex">
         <aside className="hidden md:block md:w-1/3 lg:w-1/4 md:sticky md:top-0 md:h-screen md:py-24 md:px-6 lg:px-12 md:flex md:flex-col justify-between">
@@ -108,13 +180,7 @@ const StaticPage = ({ setPage, initialSection }) => {
                       href={`#${section.id}`} 
                       onClick={(e) => {
                         e.preventDefault();
-                        if (section.ref.current) {
-                          scrollContainerRef.current.scrollTo({
-                            top: section.ref.current.offsetTop - 80,
-                            behavior: 'smooth'
-                          });
-                          window.history.replaceState(null, '', `#${section.id}`);
-                        }
+                        scrollToSection(section);
                       }}
                       className={`font-mono text-slate-400 hover:text-teal-300 transition-all duration-200 ${activeSection === section.id ? 'nav-link-active' : ''}`}
                     >
@@ -145,7 +211,7 @@ const StaticPage = ({ setPage, initialSection }) => {
             </h2>
           </div>
 
-          <section ref={aboutRef} id="about" className="mb-24 scroll-mt-24">
+          <section ref={aboutRef} id="about" className="mb-24 scroll-mt-24 reveal">
             <SectionTitle>ABOUT</SectionTitle>
             <div className="flex flex-col lg:flex-row lg:justify-evenly items-center gap-16">
               <div className="flex-shrink-0">
@@ -162,7 +228,7 @@ const StaticPage = ({ setPage, initialSection }) => {
             </div>
           </section>
           
-          <section ref={experienceRef} id="experience" className="mb-24 scroll-mt-24">
+          <section ref={experienceRef} id="experience" className="mb-24 scroll-mt-24 reveal">
             <SectionTitle>EXPERIENCE</SectionTitle>
               <div className="experience-timeline">
                 <div className="timeline-item">
@@ -234,7 +300,7 @@ const StaticPage = ({ setPage, initialSection }) => {
               </div>
           </section>
           
-          <section ref={skillsRef} id="skills" className="mb-24 scroll-mt-24">
+          <section ref={skillsRef} id="skills" className="mb-24 scroll-mt-24 reveal">
             <div className="skill-tree">
               {/* Main Title Box */}
               <div className="bg-slate-900 border border-teal-300 text-teal-300 font-bold px-6 py-3 rounded-md shadow-lg">
@@ -287,7 +353,7 @@ const StaticPage = ({ setPage, initialSection }) => {
             </div>
           </section>
           
-          <section ref={projectsRef} id="projects" className="mb-24 scroll-mt-24">
+          <section ref={projectsRef} id="projects" className="mb-24 scroll-mt-24 reveal">
             <SectionTitle>✦ PROJECTS</SectionTitle>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {projectsData.map(p => (
@@ -305,7 +371,7 @@ const StaticPage = ({ setPage, initialSection }) => {
             </div>
           </section>
 
-          <section ref={patentsRef} id="patents" className="mb-24 scroll-mt-24">
+          <section ref={patentsRef} id="patents" className="mb-24 scroll-mt-24 reveal">
             <SectionTitle>✦ PATENTS</SectionTitle>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 transition-all hover:shadow-lg hover:border-teal-300/50">
@@ -321,7 +387,7 @@ const StaticPage = ({ setPage, initialSection }) => {
             </div>
           </section>
 
-          <section ref={contactRef} id="contact" className="mb-24 scroll-mt-24">
+          <section ref={contactRef} id="contact" className="mb-24 scroll-mt-24 reveal">
             <SectionTitle>✦ CONTACT</SectionTitle>
             <P>I'm always open to discussing new projects, creative ideas, or opportunities. Feel free to reach out using the form below or connect with me on social media.</P>
             
