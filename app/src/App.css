@@ -82,38 +82,42 @@ html {
   background-color: #38b2ac;
   border-radius: 50%;
   position: relative;
+  z-index: 1; /* the orbiting plane steps between z 0 (behind) and 2 (in front) */
   animation: spin 10s linear infinite;
   box-shadow: 0 0 25px #38b2ac, inset 0 0 15px rgba(0,0,0,0.2);
   background-image: linear-gradient(135deg, #99f6e4 25%, #38b2ac 25%, #38b2ac 50%, #99f6e4 50%, #99f6e4 75%, #38b2ac 75%, #38b2ac 100%);
   background-size: 40px 40px;
 }
 
-.orbit-path {
+/* 3D spiral orbit: elliptical path, scales up in front of the globe and
+   shrinks + drops behind it on the far side (z-index steps at the sides) */
+.orbit-plane-3d {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 250px;
-  height: 250px;
-  margin-top: -125px;
-  margin-left: -125px;
-  border-radius: 50%;
-  animation: orbit 2s linear infinite;
-}
-
-.orbit-plane {
-  position: absolute;
-  top: -16px;
-  left: 50%;
-  margin-left: -16px;
   width: 32px;
   height: 32px;
+  margin: -16px 0 0 -16px;
   color: white;
-  transform: rotate(90deg);
   font-size: 1.6rem; /* AirplaneIcon sizes itself in em (1.25em ≈ 32px here) */
   filter: drop-shadow(0 0 4px rgba(100, 255, 218, 0.6));
+  animation: orbit3d 2s linear infinite; /* one full pass per 2s transition */
 }
+
+@keyframes orbit3d {
+  0%    { transform: translate(160px, 0)     scale(0.85) rotate(135deg); z-index: 2; }
+  12.5% { transform: translate(113px, 32px)  scale(1.02) rotate(180deg); z-index: 2; }
+  25%   { transform: translate(0, 45px)      scale(1.15) rotate(225deg); z-index: 2; }
+  37.5% { transform: translate(-113px, 32px) scale(1.02) rotate(270deg); z-index: 2; }
+  50%   { transform: translate(-160px, 0)    scale(0.85) rotate(315deg); z-index: 0; }
+  62.5% { transform: translate(-113px, -32px) scale(0.68) rotate(360deg); z-index: 0; }
+  75%   { transform: translate(0, -45px)     scale(0.55) rotate(405deg); z-index: 0; }
+  87.5% { transform: translate(113px, -32px) scale(0.68) rotate(450deg); z-index: 0; }
+  100%  { transform: translate(160px, 0)     scale(0.85) rotate(495deg); z-index: 2; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .orbit-path, .globe {
+  .orbit-plane-3d, .globe {
     animation: none;
   }
 }
@@ -124,11 +128,6 @@ html {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes orbit {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
