@@ -7,13 +7,13 @@ const Experience = () => {
         <SectionTitle>EXPERIENCE</SectionTitle>
         <div className="mb-6">
             <h3 className="text-white font-semibold">Mechanical Engineering Intern | Elementrailer</h3>
-            <p className="text-xs text-slate-300 mb-2">Oct 2025 - Present</p>
+            <p className="text-xs text-slate-300 mb-2">Oct 2025 - Sep 2026</p>
             <ul className="list-none pl-4 text-white">
-                <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Design the trailer frame, suspension and battery cradle in SolidWorks/Onshape through manufacturing release (sheet metal, flat patterns, GD&amp;T, DFM); work directly with overseas suppliers on the chassis, battery pack and cable assemblies.</li>
+                <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Designed the trailer frame, suspension and battery cradle in SolidWorks/Onshape through manufacturing release (sheet metal, flat patterns, GD&amp;T, DFM); worked directly with overseas suppliers on the chassis, battery pack and cable assemblies.</li>
                 <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Derived the hitch load cases from vehicle statics in Python, then ran the scripted ANSYS analysis of the load-cell hitch (6 bodies, 28 pretensioned bolts, frictional contact, 12 load cases); preload and material studies set the coupler pin position and the fix for the M10 joint.</li>
                 <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Traced non-physical stresses in the A-frame tongue model to a CAD joint that is not how the frame is welded; confirmed the real lap joint with the builder, rebuilt the model, and delivered the governing weld detail in one re-run.</li>
                 <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Ran a 10 kN Instron compression test of both hitch load cells with the adapter plate (exercise cycles, then a load ladder to 3.78 kN), confirming the calibration scale factor to ~1%.</li>
-                <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Keep the BOM and build documentation current, and take part in prototype assembly, fit-up and road tests.</li>
+                <li className="relative before:content-['▹'] before:absolute before:left-[-1em] before:text-teal-300">Kept the BOM and build documentation current, and took part in prototype assembly, fit-up and road tests.</li>
             </ul>
         </div>
         <div className="mb-6">
