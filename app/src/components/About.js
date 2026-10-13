@@ -15,7 +15,7 @@ const About = () => (
             />
         </div>
         <div className="w-full max-w-2xl text-center">
-            <P>My name is Greesh and I’m currently pursuing my Masters in Aeronautics and Astronautics at UW! From what started as watching aircrafts soar in the sky from my terrace, became a long-lasting love which fueled my desire to design them! The roar from the engines, resonate with the ambition to become an Aerospace Engineer and one day enter the industry to design aircrafts that more robust and efficient than ever before.</P>
+            <P>I'm a mechanical engineer finishing my M.S. in Aeronautics &amp; Astronautics (Structures) at the University of Washington in December 2026. I like work that goes from CAD to hardware to data: at an electric-trailer startup I took frame, suspension and battery-cradle parts from design through drawings and supplier release to prototype assembly, and for my thesis I test composite parts to failure on an Instron, measure them with a two-camera strain system I wrote myself, and inspect them with X-ray CT. I'm looking for full-time design, test and structures roles starting January 2027.</P>
         </div>
     </div>
   </div>
